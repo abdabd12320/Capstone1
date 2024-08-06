@@ -81,21 +81,30 @@ public class ControllerUser {
         }
         return ResponseEntity.status(400).body(new ApiResponseUser("Bad request"));
     }
-    @PutMapping("/change-price-by-merchant/{amount}/{pr}/{mid}/{pid}/{uid}")
-    public ResponseEntity changePriceByMerchant(@PathVariable double amount,@PathVariable char pr,@PathVariable String mid,@PathVariable String pid,@PathVariable String uid)
+    @PutMapping("/change-price-by-merchant/{newprice}/{mid}/{pid}/{uid}")
+    public ResponseEntity changePriceByMerchant(@PathVariable double newprice,@PathVariable String mid,@PathVariable String pid,@PathVariable String uid)
     {
-        if(serviceUser.changePriceByMerchant(amount, pr, mid, pid, uid).equals("true"))
+        if(serviceUser.changePriceByMerchant(newprice, mid, pid, uid).equals("true"))
         {
             return ResponseEntity.status(200).body(new ApiResponseUser("The price changed"));
         }
-        if(serviceUser.changePriceByMerchant(amount, pr, mid, pid, uid).equals("false"))
+        if(serviceUser.changePriceByMerchant(newprice, mid, pid, uid).equals("false"))
         {
             return ResponseEntity.status(400).body(new ApiResponseUser("Bad request"));
         }
-        if(serviceUser.changePriceByMerchant(amount, pr, mid, pid, uid).equals("admin"))
+        if(serviceUser.changePriceByMerchant(newprice, mid, pid, uid).equals("admin"))
         {
             return ResponseEntity.status(400).body(new ApiResponseUser("Only admin"));
         }
         return ResponseEntity.status(400).body(new ApiResponseUser("not found"));
+    }
+    @PutMapping("/discount-for-user-who-bought/{userid}/{merchantid}")
+    public ResponseEntity discountForUserWhoBought(@PathVariable String userid,@PathVariable String merchantid)
+    {
+        if(serviceUser.discountForUserWhoBought(userid, merchantid))
+        {
+            return ResponseEntity.status(200).body(new ApiResponseUser("Done discount"));
+        }
+        return ResponseEntity.status(400).body(new ApiResponseUser("Bad request"));
     }
 }
